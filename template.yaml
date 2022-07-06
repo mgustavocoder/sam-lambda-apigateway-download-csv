@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: sam-lambda-apigateway
+
+Globals:
+  Function:
+    Timeout: 30
+    MemorySize: 512
+
+Resources:
+  DownloadFileApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Dev
+      Auth:
+        ApiKeyRequired: true
+        UsagePlan:
+          CreateUsagePlan: PER_API
+          Description: Usage plan for this API
+          Quota:
+            Limit: 300
+            Period: MONTH
+          Throttle:
+            BurstLimit: 5
+            RateLimit: 2
+          Tags:
+            - Key: TagName
+              Value: TagValue
+
+  DownloadFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: DownloadFunction
+      CodeUri: dist/src/functions
+      Handler: download/handler.handler
+      Runtime: nodejs14.x
+      Events:
+        DownloadFunction:
+          Type: Api
+          Properties:
+            RestApiId: !Ref DownloadFileApi
+            Path: /download
+            Method: get
+
+
+Outputs:
+  ServerlessHttpApi:
+    Value:
+      Fn::Sub: https://${DownloadFileApi}.execute-api.${AWS::Region}.amazonaws.com/Dev/download/"

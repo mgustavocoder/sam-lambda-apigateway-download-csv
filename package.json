@@ -1,0 +1,44 @@
+{
+  "name": "sam-lambda-apigateway",
+  "version": "1.0.0",
+  "description": "Sam Lambda Apigateway",
+  "repository": "",
+  "author": "",
+  "engines": {
+    "node": "^14"
+  },
+  "license": "ISC",
+  "scripts": {
+    "build": "rm dist -rf && tsc && cp -r node_modules dist/src/functions/node_modules",
+    "lint": "npx eslint 'src/**'",
+    "test": "jest -i ./tests --detectOpenHandles --silent=false",
+    "start:api": "npm run build && sam local start-api -p 3000",
+    "local:dev:deploy": "sam deploy --profile default",
+    "invoke:local:report": "npm run build && sam local invoke DownloadFunction --no-event",
+    "test:coverage": "jest -i ./tests --detectOpenHandles --silent=false --coverage",
+    "test:watch": "jest -i ./tests --detectOpenHandles --silent=false --watchAll"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.84",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.6",
+    "@types/request": "^2.48.8",
+    "@typescript-eslint/eslint-plugin": "^5.1.0",
+    "@typescript-eslint/parser": "^5.1.0",
+    "aws-sdk-mock": "^5.4.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-jest": "^25.2.2",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.1",
+    "husky": "^7.0.4",
+    "jest": "^27.3.1",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "json-2-csv": "^3.17.1"
+  }
+}
